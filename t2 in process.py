@@ -7,32 +7,28 @@ Created on Tue Apr 20 12:53:12 2021
 
 from scipy.io import loadmat
 
-sacar = loadmat('realmatlab.mat')
+import numpy
 
-slice1 = sacar['slice1']
-
-tes = sacar['tes']
-
-data = slice1
-
-import numpy 
-import numpy.array
-
-def ajustar(pixel_col):
-    x = numpy.array('slice1')
-    y = numpy.array(tes)
+# ajusta KS0 y T2 según la ecuacion
+def ajustar(pixel_col, times):
+    x = pixel_col
+    y = numpy.array(times)
     (A, B) = numpy.polyfit(x, numpy.log(y), 1, w=numpy.sqrt(y))
     KS0 = numpy.exp(A)
     T2 = -1/B
+    return (KS0, T2)
 
-info = []
-for image in range(0,50):
-    for x in range (0, 128):
-        for y in range (0,128):
-            pixel = x*128 + y
-            
-            while len(info) < pixel:
-                info.append([])
-                
-            info[pixel].append(data(image)[x][y])
-            
+def main():
+    sacar = loadmat('realmatlab.mat')
+    
+    slice1 = sacar['slice1']
+    times = sacar['tes']
+    
+    for line_arrays in slice1:
+        for pixel_array in line_arrays:
+            (KS0, T2) = ajustar(pixel_array, times[0])
+            # aqui su codigo de prueba
+
+# buena practica
+if __name__ == "__main__":
+    main()
