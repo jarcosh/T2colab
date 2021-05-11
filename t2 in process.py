@@ -24,11 +24,16 @@ def main():
     slice1 = sacar['slice1']
     times = sacar['tes']
     
+    data = []
     for line_arrays in slice1:
+        line = []
         for pixel_array in line_arrays:
             (KS0, T2) = ajustar(pixel_array, times[0])
+            line.append((KS0, T2))
+        data.append(line)
             # aqui su codigo de prueba
+    return data
 
-# buena practica
+# buena practica + guardar en data para visualizar
 if __name__ == "__main__":
-    main()
+    data = main()
